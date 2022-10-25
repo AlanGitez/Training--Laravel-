@@ -9,11 +9,13 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class AdminController extends Controller{
     private $isAdmin;
-    private $employees;
+    protected $employees;
+    protected $count; 
 
     public function __construct(){
         $this->isAdmin = /*Verificar si es admin al AdminModel */ true;
         $this->employees = User::all("id", "name", "email");
+        $this->count = count($this->employees);
     }
 
     public function index(){
@@ -40,7 +42,7 @@ class AdminController extends Controller{
         return redirect()->route($user->wasRecentlyCreated ? "admin" : "admin/add")
         ->with('status', [
             "count" => count($this->employees)+1, 
-            "success" => $user->wasRecentlyCreated ? 
+            "response" => $user->wasRecentlyCreated ? 
             'Employee added successfully' : 'Some fields are wrong',
         ]);
     }
@@ -48,9 +50,12 @@ class AdminController extends Controller{
     public function destroy($id){
 
         $employee = User::find($id);
+        $response = $employee->delete();
 
-        echo "<pre>";
-        var_dump($employee);
-        echo "<pre>";
+        return redirect()->route("admin")->with('status', [
+            "count" => $this->count-1, 
+            "response" => $response ? 
+            'Employee deleted successfully' : 'Something went wrong',
+        ]);
     }
 }

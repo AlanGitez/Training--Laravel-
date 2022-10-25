@@ -1,7 +1,7 @@
 
 
 <div class="container border shadow">
-   
+
     <div class="my-table">
     <table class="table" >
     <thead>
@@ -10,6 +10,7 @@
                         <th colspan="empty">Array is empty</th>
                 @else
                         @foreach($employees[0]->getAttributes() as $key => $value)
+                        
                                 <th> {{ $key }} </th> 
                         @endforeach 
                         <th>EDIT</th>
@@ -24,15 +25,21 @@
                         @foreach($employee->getAttributes() as $col)
                                 <td>  {{ $col }} </td>
                         @endforeach
-                        
+                   
                         <td>
-                        <a 
-                        href='#' 
-                        class='btn'><img href='/assets/images/trash.png' alt=''></a></td>
+                        <form action="{{ route("employee-edit", [$employee->id]) }}" method="PUT">
+                                @method('UPDATE')
+                                @csrf
+                                <button>btn</button>
+                        </form> 
+                        </td>
                         <td>
-                        <a 
-                        href='#' 
-                        class='btn'><img href='/assets/images/edit.png' alt=''></a></td>
+                                <form action="{{ route("employee-delete", [$employee->id]) }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button>btn</button>
+                                </form> 
+                        </td>
                 </tr>
                 
             @endforeach            

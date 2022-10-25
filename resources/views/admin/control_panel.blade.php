@@ -3,7 +3,7 @@
     <a href="admin/add" class="btn">New</a>
 
     <div class="message">
-        {{session("status") ? session("status")["success"] :  ""}}
+        {{session("status") ? session("status")["response"] :  ""}}
     </div>
 
     <div class="count">{{ session("status") ? session("status")["count"] : 0 }}</div>
