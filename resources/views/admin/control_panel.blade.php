@@ -3,10 +3,10 @@
     <a href="admin/add" class="btn">New</a>
 
     <div class="message">
-        {{session("success") ?? ""}}
+        {{session("status") ? session("status")["success"] :  ""}}
     </div>
 
-    <div class="count">0</div>
+    <div class="count">{{ session("status") ? session("status")["count"] : 0 }}</div>
 </div>
 
 @yield("content")

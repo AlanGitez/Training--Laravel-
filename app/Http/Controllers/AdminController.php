@@ -5,18 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Symfony\Component\VarDumper\VarDumper;
 
 class AdminController extends Controller{
     private $isAdmin;
-    private $emplooyes;
+    private $employees;
 
     public function __construct(){
         $this->isAdmin = /*Verificar si es admin al AdminModel */ true;
+        $this->employees = User::all("id", "name", "email");
     }
 
     public function index(){
-        $emplooyes = User::all();
-        return view("admin.index", ["employees" => $emplooyes]);
+        // echo "<pre>";
+        // var_dump(session("success"));
+        // echo "<pre>";
+
+        return view("admin.index", ["employees" => $this->employees]);
     }
 
     public function showRegisterUser(){
@@ -25,26 +30,27 @@ class AdminController extends Controller{
         return view("admin.register_user.index", ["bool" => true]);
     }
 
-    public function add(Request $request){
+    public function store(Request $request){
         $input = $request->input();
         array_shift($input);
         array_pop($input);
 
-        $response = new User();
-        foreach ($input as $key => $value):
-            $response[$key] = $value;
-        endforeach;
-        
+        $user = User::create($input);
+
+        return redirect()->route($user->wasRecentlyCreated ? "admin" : "admin/add")
+        ->with('status', [
+            "count" => count($this->employees)+1, 
+            "success" => $user->wasRecentlyCreated ? 
+            'Employee added successfully' : 'Some fields are wrong',
+        ]);
+    }
+
+    public function destroy($id){
+
+        $employee = User::find($id);
 
         echo "<pre>";
-        var_dump($response);
+        var_dump($employee);
         echo "<pre>";
-        $bool = true;
-
-        // if($bool):
-        //     return redirect()->route("admin")->with('success', 'Employee added successfully');
-        // else:
-        //     return redirect()->route("admin/add")->with('Warning', 'Some fields are wrong');
-        // endif;
     }
 }

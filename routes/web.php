@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/admin", [AdminController::class, 'index'])->name("admin");
 Route::get("/admin/add", [AdminController::class, 'showRegisterUser']);
-Route::post("/admin/add", [AdminController::class, 'add']);
-
+Route::post("/admin/add", [AdminController::class, 'store']);
+Route::delete("/admin/delete/{id}", [AdminController::class, "destroy"]);
 
 
 

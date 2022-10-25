@@ -13,7 +13,7 @@
         placeholder="Lastname">
         <input 
         type="email" 
-        name="mail"
+        name="email"
         placeholder="Email">
         <input 
         type="password" 

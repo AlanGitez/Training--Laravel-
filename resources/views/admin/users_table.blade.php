@@ -9,8 +9,8 @@
                 @if (!count($employees))
                         <th colspan="empty">Array is empty</th>
                 @else
-                        @foreach($employees[0] as $key => $value)
-                                <th> echo $key; </th> 
+                        @foreach($employees[0]->getAttributes() as $key => $value)
+                                <th> {{ $key }} </th> 
                         @endforeach 
                         <th>EDIT</th>
                         <th>DELETE</th>
@@ -21,10 +21,11 @@
             @foreach($employees as $employee) 
                 
                 <tr>
-                        @foreach($employee as $col)
-                                <td>  echo $col; </td>
+                        @foreach($employee->getAttributes() as $col)
+                                <td>  {{ $col }} </td>
                         @endforeach
-                  <td>
+                        
+                        <td>
                         <a 
                         href='#' 
                         class='btn'><img href='/assets/images/trash.png' alt=''></a></td>
