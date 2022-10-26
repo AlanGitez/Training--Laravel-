@@ -1,6 +1,6 @@
 
 
-<div class="container border shadow">
+<div class="container border shadow ">
 
     <div class="my-table">
     <table class="table" >
@@ -27,14 +27,14 @@
                         @endforeach
                    
                         <td>
-                        <form action="{{ route("employee-edit", [$employee->id]) }}" method="PUT">
+                        <form action="{{ route("employee.edit", [$employee->id]) }}" method="PUT">
                                 @method('UPDATE')
                                 @csrf
                                 <button>btn</button>
                         </form> 
                         </td>
                         <td>
-                                <form action="{{ route("employee-delete", [$employee->id]) }}" method="POST">
+                                <form action="{{ route("employee.delete", [$employee->id]) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
                                         <button>btn</button>
@@ -47,5 +47,15 @@
     </tbody>
     </table>
     </div>
+
+    <div>
+        
+       soy yo
+       
+        {{ var_dump(session("c_t"))}}
+    
+
+    </div>
+
 </div>
 

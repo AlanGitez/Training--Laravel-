@@ -1,12 +1,11 @@
+@extends("employee.index")
+
+@section("content")
 
 <div class="f">
-    <h3>Register</h3>
-    <form action="{{ route('employee.add')}}" method="post" class="border">
+    <h3>Login</h3>
+    <form action="{{ route('employee.login')}}" method="post" class="border">
         @csrf
-        <input 
-        type="text" 
-        name="name" 
-        placeholder="Name">
         <input 
         type="email" 
         name="email"
@@ -22,3 +21,4 @@
 </div>
 
 @include('form_error')
+@endsection

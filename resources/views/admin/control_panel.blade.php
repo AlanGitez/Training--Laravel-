@@ -1,5 +1,5 @@
 
-<div class="panel m-1 w-100">
+<div class="panel m-1">
     <a href="admin/add" class="btn">New</a>
 
     <div class="message">
