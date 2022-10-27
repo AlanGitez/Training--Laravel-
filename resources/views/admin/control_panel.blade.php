@@ -6,7 +6,7 @@
         {{session("status") ? session("status")["response"] :  ""}}
     </div>
 
-    <div class="count">{{ session("status") ? session("status")["count"] : 0 }}</div>
+    <div class="count">{{ session("count") ? session("count") : 0 }}</div>
 </div>
 
 @yield("content")

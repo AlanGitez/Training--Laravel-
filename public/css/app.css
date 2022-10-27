@@ -54,6 +54,11 @@ header * {
     margin-right: 15px;
 }
 
+.my-table{
+    overflow-y: scroll;
+    max-height: 60vh;
+}
+
 .count{
     /* border: 1px solid green; */
     background-color: yellowgreen;

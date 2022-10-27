@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class VerifyCredentials
 {
@@ -16,14 +18,14 @@ class VerifyCredentials
      */
     public function handle(Request $request, Closure $next, $type = null){
 
-        $credentials = null;
 
         if($type == "login"){
+
             $credentials = $request->validate([
                 "email" => "required|email",
                 "password" => "required|alpha_num",
             ], $message = ['required' => 'the :attribute field is required']);
-            $request['credentials'] = $credentials;
+            $request->merge(["credentials" => $credentials]);
 
         }elseif($type == "register"){
             $credentials = $request->validate([
@@ -31,10 +33,13 @@ class VerifyCredentials
                 "email" => "required|email",
                 "password" => "required|alpha_num",
             ], $message = ['required' => 'the :attribute field is required']);
-
-        }else return redirect(route("employee.index"));
-
-        if(!$credentials) return redirect(route("/"));
-        else return $next($request);
+            
+            $credentials["password"] = Hash::make($credentials['password']);
+            $request->merge(["credentials" => $credentials]);
+            
+        }
+        // if(!$credentials) return redirect(route("/"));
+        // else return $next($request);
+        return $next($request);
     }
 }

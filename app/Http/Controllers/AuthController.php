@@ -19,20 +19,18 @@ class AuthController extends Controller
 
     public function login(Request $req){
  
-        if(session("id")) return redirect(route("employee.index"));
+        // if(session("id")) return redirect(route("employee.index"));
         $credentials = $req["credentials"];
-
         if(Auth::attempt($credentials)):
             $user = Auth::user();
             $token = $user->createToken('log_token')->plainTextToken;
     
             Cookie::queue("cookie_token", $token, 60 * 24);
             session()->put("id", $user['id']);
-            return redirect(route("employee.index"));
-
-        else:
-            return redirect("/");
+            
         endif;
+        return redirect(route("employee.index"));
+
     }
 
     public function logout(Request $req){

@@ -34,7 +34,7 @@
                         </form> 
                         </td>
                         <td>
-                                <form action="{{ route("employee.delete", [$employee->id]) }}" method="POST">
+                                <form action="{{ route('employee.delete', [$employee->id]) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
                                         <button>btn</button>

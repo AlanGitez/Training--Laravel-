@@ -4,10 +4,13 @@
 
 <div class="container w-50 mt-5 border shadow">
     @if(session("id") != null)
-        <h1>Ya estoy logueado</h1>
+    {{-- @auth --}}
         @include("employee.billboard")
+    {{-- @endauth --}}
     @else
+    {{-- @guest --}}
         @yield("content")
+    {{-- @endguest  --}}
     @endif
 </div>
 
