@@ -30,7 +30,7 @@ class Authenticate extends Middleware
             if($cookie = $request->cookie("cookie_token")){
                 $id = Auth::id();
 
-                if(Session::get("id") != $id) throw new Exception("Please, login first");
+                if(Session::get("user")['id'] != $id) throw new Exception("Please, login first");
                     
                 return $next($request);
             }else throw new Exception("Please, login first");

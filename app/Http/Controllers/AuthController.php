@@ -17,21 +17,20 @@ class AuthController extends Controller{
     public function index(Request $request){
         
         try {
-            $id = Auth::id();
-            if(empty(User::find($id)))
+            $user = Auth::user();
+            if(empty(User::find($user['id'])))
                 throw new Exception("Unauthorized");
-            SessionController::putSession(["id" => $id]);
+            SessionController::putSession(["user" => $user->only("id", "name")]);
 
         } catch (Exception $e) {
             SessionController::flashSession(["error" => $e->getMessage()]);
-
         }
                
         return view("employee.index");
     }
 
     public function login(Request $req){
-        if(Session::get("id")) return redirect(route("employee.index"));
+        // if(Session::get("user")) return redirect(route("employee.index"));
 
         try {
             $credentials = $req["credentials"];
@@ -39,10 +38,10 @@ class AuthController extends Controller{
                 throw new Exception("Cannot varify your credentials, contact your admin.");
             else{
                 $user = Auth::user();    
-               $token = $user->createToken('log_token')->plainTextToken;
-       
+                $token = $user->createToken('log_token')->plainTextToken;
+
                Cookie::queue("cookie_token", $token, 60 * 24);
-               SessionController::putSession(["id" => $user['id']]);
+               SessionController::putSession(["user" => $user->only("id", "name")]);
             }
             
             return redirect(route("employee.index"));
@@ -57,7 +56,7 @@ class AuthController extends Controller{
 
     public function logout(Request $req){
         Cookie::queue(Cookie::forget("cookie_token"));
-        SessionController::putSession(["id" => null]);
+        SessionController::putSession(["user" => null]);
         return redirect(route("employee.index"));
     }
 }

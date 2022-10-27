@@ -12,22 +12,7 @@
 </head>
 <body>
 
-    <header class="bg-{{ session('id') ? 'success' : 'warning' }}">
-
-        <form action="{{ session("id") 
-                        ? route('employee.logout') 
-                        : route('employee.login')   }}" method="POST">
-            @csrf
-            @if (session("id") != null)
-                @method("POST")
-            @else
-                @method("GET")
-            @endif
-            <button>{{ session("id") ? "logout" : "login" }}</button>
-        </form>
-        
-      </header>
-
+    @include('commons.header')
     @yield("index")
     
 </body>
