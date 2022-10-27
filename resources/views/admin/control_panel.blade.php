@@ -3,10 +3,10 @@
     <a href="admin/add" class="btn">New</a>
 
     <div class="message">
-        {{session("status") ? session("status")["response"] :  ""}}
+        {{ Session::get("error") ?? "Successfully delete"}}
     </div>
 
-    <div class="count">{{ session("count") ? session("count") : 0 }}</div>
+    <div class="count">{{ Session::get("count") ?? 0 }}</div>
 </div>
 
 @yield("content")

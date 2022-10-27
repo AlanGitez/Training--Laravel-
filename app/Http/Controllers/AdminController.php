@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\RegisterException;
 use App\Models\User;
-
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\VarDumper\VarDumper;
+use App\Http\Controllers\SessionController;
 
 class AdminController extends Controller{
     protected $employees;
@@ -19,10 +22,8 @@ class AdminController extends Controller{
 
     public function index(){
         
-        session()->put("count", $this->count);
-
+        SessionController::putSession(["count" => $this->count]);
         return view("admin.index", ["employees" => $this->employees]);
-
     }
 
     public function showRegisterUser(){
@@ -32,24 +33,35 @@ class AdminController extends Controller{
 
     public function store(Request $request){
         
-        $user = User::create($request['credentials']);
-        return redirect()->route($user->wasRecentlyCreated ? "admin.index" : "employee.add")
-        ->with('status', [
-            "count" => count($this->employees)+1, 
-            "response" => $user->wasRecentlyCreated ? 
-            'Employee added successfully' : 'Some fields are wrong',
-        ]);
+        try{
+            $email = $request['credentials']["email"];
+
+            if(User::where("email", $email)->count())
+                throw new Exception("Email must be unique");
+            
+            $user = User::create($request['credentials']);
+            return redirect()->route("admin.index");
+
+        }catch(Exception $e){
+            SessionController::flashSession(["error" => $e->getMessage()]);
+            return redirect()->back();
+        }
 
     }
 
     public function destroy($id){
 
-        $employee = User::find($id);
-        $response = $employee->delete();
+        try {
+            $employee = User::find($id);
+            if(empty($employee)) 
+                throw new Exception("Cannot find user by id: ". $id);
+            $employee->delete();
+            SessionController::flashSession(["error" => false]);
+            return redirect()->back();
 
-        return redirect()->route("admin.index")->with('status', [
-            "response" => $response ? 
-            'Employee deleted successfully' : 'Something went wrong',
-        ]);
+        } catch (Exception $e) {
+            SessionController::flashSession(["error" => $e->getMessage()]);
+            return redirect()->back();
+        }
     }
 }

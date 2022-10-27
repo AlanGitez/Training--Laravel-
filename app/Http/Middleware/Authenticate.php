@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Middleware;
-use Closure;
 
+use App\Http\Controllers\SessionController;
+use Closure;
+use Exception;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Session;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -22,9 +26,18 @@ class Authenticate extends Middleware
 
     public function handle($request, Closure $next, ...$guards){
 
-        if($cookie = $request->cookie("cookie_token")){
-            return $next($request);
-        }else return redirect(route('employee.login'));
+        try {
+            if($cookie = $request->cookie("cookie_token")){
+                $id = Auth::id();
 
+                if(Session::get("id") != $id) throw new Exception("Please, login first");
+                    
+                return $next($request);
+            }else throw new Exception("Please, login first");
+
+        } catch (Exception $e) {
+            return redirect(route('employee.login'));
+        }
     }
+    
 }

@@ -1,4 +1,5 @@
 
+
 <div class="f">
     <h3>Register</h3>
     <form action="{{ route('employee.add')}}" method="post" class="border">
