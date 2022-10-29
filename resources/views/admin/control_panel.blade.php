@@ -1,10 +1,9 @@
 
-<div class="panel m-1">
-    <a href="admin/add" class="btn">New</a>
+<div class="panel m-1 w-100">
 
-    <div class="message">
+    {{-- <div class="message">
         {{ Session::get("error") ?? "Successfully delete"}}
-    </div>
+    </div> --}}
 
     <div class="count">{{ Session::get("count") ?? 0 }}</div>
 </div>

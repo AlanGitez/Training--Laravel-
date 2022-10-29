@@ -15,7 +15,16 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string("task");
+            $table->string("title");
+
+            //relacion uno a uno
+            $table->unsignedBigInteger("user_id")->nullable();
+            $table->foreign("user_id")
+            ->references("id")
+            ->on("users")
+            ->onDelete("set null")
+            ->onUpdate("cascade");
+
             $table->timestamps();
         });
     }

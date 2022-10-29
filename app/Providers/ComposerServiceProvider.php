@@ -26,8 +26,10 @@ class ComposerServiceProvider extends ServiceProvider
         
         View::composer("commons.header", function($view){
             $user = Session::get("user") ?? null;
+            $model = Session::get("model") ?? null;
             return $view->with([
-                "user" => $user
+                "user" => $user,
+                "model" => $model
             ]);
         });
     }

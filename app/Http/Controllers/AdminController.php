@@ -2,22 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\RegisterException;
+// use App\Exceptions\RegisterException;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\MessageBag;
-use Symfony\Component\VarDumper\VarDumper;
+// use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\MessageBag;
+// use Symfony\Component\VarDumper\VarDumper;
 use App\Http\Controllers\SessionController;
+use App\Repositories\Implemetations\TaskRepository;
+use App\Repositories\Implemetations\UserRepository;
 
 class AdminController extends Controller{
     protected $employees;
     protected $count; 
+    protected $userRepository;
+    protected $repositories;
 
-    public function __construct(){
+    
+    public function __construct(UserRepository $userRepository, TaskRepository $taskRepository){
+        $this->userRepository = $userRepository;
         $this->employees = User::all("id", "name", "email");
         $this->count = count($this->employees);
+        $this->repositories = [$userRepository, $taskRepository];
+        
     }
 
     public function index(){
@@ -26,31 +34,30 @@ class AdminController extends Controller{
         return view("admin.index", ["employees" => $this->employees]);
     }
 
-    public function showRegisterUser(){
-        // if is true admin ...
-        return view("admin.register_user.index", ["bool" => true]);
+    public function showForm($model){
+
+        foreach($this->repositories as $repo):
+            if($model == $repo->type):
+                return view($repo->formRoute, ["bool" => true]);
+            endif;
+        endforeach;
+
     }
 
-    public function store(Request $request){
+    public function store(Request $req){
         
-        try{
-            $email = $request['credentials']["email"];
+        $response = $this->userRepository->store($req['credentials']);
 
-            if(User::where("email", $email)->count())
-                throw new Exception("Email must be unique");
-            
-            $user = User::create($request['credentials']);
-            return redirect()->route("admin.index");
-
-        }catch(Exception $e){
-            SessionController::flashSession(["error" => $e->getMessage()]);
+        if($response['error']){
+            SessionController::flashSession(["error" => $response['data']]);
             return redirect()->back();
         }
 
+        return redirect()->route("admin.index");
+
     }
 
-    public function destroy($id){
-
+    public function destroy($model, $id ){
         try {
             $employee = User::find($id);
             if(empty($employee)) 

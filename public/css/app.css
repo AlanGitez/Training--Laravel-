@@ -5,6 +5,10 @@ body{
     align-items: center;
     background-color: rgb(226, 225, 225);
 }
+
+a{
+    text-decoration: none;
+}
 img{
     height: 100%;
     width: 100%;
@@ -45,13 +49,15 @@ header{
     display: flex;
     justify-content: center;
     align-items: center;
-
-
 }
 
 header * {
     margin-left: auto;
     margin-right: 15px;
+}
+
+.nav-index{
+    margin-left: 25px;
 }
 
 .my-table{
@@ -71,10 +77,7 @@ form{
     flex-direction: column;
     justify-content: space-between;
 }
-.btn{
-    background-color: grey !important;
-    border-radius: 0px !important   ;
-}
+
 a.status-ok, a.status-off{
     width: 100%;
     text-align: center;

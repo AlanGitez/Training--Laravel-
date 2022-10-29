@@ -1,8 +1,8 @@
 
 
 <div class="f">
-    <h3>Register</h3>
-    <form action="{{ route('employee.add')}}" method="post" class="border">
+    <h3>New employee</h3>
+    <form action="/admin/employee/add" method="post" class="border">
         @csrf
         <input 
         type="text" 
